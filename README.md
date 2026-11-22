@@ -5,7 +5,7 @@ Calculette d'alcoolémie personnelle, en PWA locale pour iPhone et iPad. Tout re
 ## Fonctions
 
 - Profil : sexe, âge, poids, taille.
-- Boissons : liste prédéfinie (bière, vin, champagne, pastis, whisky, cocktail, etc.) et saisie libre (volume et degré).
+- Boissons : catalogue de marques courantes avec leur degré réel (Leffe, Guinness, Kronenbourg, Heineken, Chimay, Ricard, etc.), formats usuels, et saisie libre. Le degré est toujours modifiable : pour le vin, on saisit celui de la bouteille. Un astérisque signale un degré indicatif à confirmer sur l'étiquette.
 - Heure de chaque verre, avec absorption progressive puis élimination.
 - Repas : à jeun, léger ou copieux (ralentit l'absorption et abaisse un peu le pic).
 - Taux actuel en g/L de sang et en mg/L d'air, graphique de la soirée.

@@ -6,6 +6,7 @@ Application web statique, sans serveur ni dépendance externe. Elle fonctionne h
 Alcoolemie/
 ├── index.html            Structure de la page (cartes : état, ajout, liste, profil, Santé)
 ├── style.css             Thème sombre, mise en page mobile
+├── boissons.js           Catalogue de boissons : marques, degrés, formats (degré toujours modifiable)
 ├── calc.js               Moteur de calcul pur (aucun accès au DOM), testable sous Node
 ├── app.js                Interface : rendu, formulaires, stockage local, Raccourcis
 ├── sw.js                 Service worker : cache pour l'usage hors ligne

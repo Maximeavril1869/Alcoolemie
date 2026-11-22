@@ -36,10 +36,14 @@
     <label>Boisson
       <select id="boisson"></select>
     </label>
-    <div id="libre" class="ligne cache">
-      <label>Volume (cl)<input id="libre-vol" type="number" inputmode="decimal" min="0" step="0.5" value="25"></label>
-      <label>Degré (%)<input id="libre-deg" type="number" inputmode="decimal" min="0" step="0.5" value="5"></label>
+    <div class="ligne">
+      <label>Volume<select id="format"></select></label>
+      <label>Degré (%)<input id="deg" type="number" inputmode="decimal" min="0" max="96" step="0.1"></label>
     </div>
+    <div id="libre" class="cache">
+      <label>Volume en cl<input id="libre-vol" type="number" inputmode="decimal" min="0" step="0.5" value="25"></label>
+    </div>
+    <p id="note-boisson" class="discret"></p>
     <div class="ligne">
       <label>Quantité<input id="quantite" type="number" inputmode="numeric" min="1" max="20" value="1"></label>
       <label>Heure<input id="heure" type="time"></label>
@@ -99,6 +103,7 @@
     Le taux réel peut être plus élevé. Ne prends pas le volant après avoir bu.
   </p>
 </main>
+<script src="boissons.js"></script>
 <script src="calc.js"></script>
 <script src="app.js"></script>
 </body>

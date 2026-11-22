@@ -7,24 +7,6 @@
   var DENSITE = 0.8; // g/mL d'éthanol
   var MIN = 60000;
 
-  var BOISSONS = [
-    { id: 'demi', nom: 'Demi de bière (25 cl, 5 %)', vol: 250, deg: 5 },
-    { id: 'biere33', nom: 'Bière bouteille (33 cl, 5 %)', vol: 330, deg: 5 },
-    { id: 'pinte', nom: 'Pinte de bière (50 cl, 5 %)', vol: 500, deg: 5 },
-    { id: 'biere_forte', nom: 'Bière forte (33 cl, 8 %)', vol: 330, deg: 8 },
-    { id: 'vin', nom: 'Verre de vin (12 cl, 12 %)', vol: 120, deg: 12 },
-    { id: 'vin_grand', nom: 'Grand verre de vin (15 cl, 13 %)', vol: 150, deg: 13 },
-    { id: 'champagne', nom: 'Coupe de champagne (10 cl, 12 %)', vol: 100, deg: 12 },
-    { id: 'cidre', nom: 'Cidre (25 cl, 5 %)', vol: 250, deg: 5 },
-    { id: 'pastis', nom: 'Pastis (2 cl, 45 %)', vol: 20, deg: 45 },
-    { id: 'whisky', nom: 'Whisky / spiritueux (4 cl, 40 %)', vol: 40, deg: 40 },
-    { id: 'digestif', nom: 'Digestif (4 cl, 40 %)', vol: 40, deg: 40 },
-    { id: 'cocktail', nom: 'Cocktail (15 cl, 15 %)', vol: 150, deg: 15 },
-    { id: 'aperitif', nom: 'Apéritif sucré (7 cl, 18 %)', vol: 70, deg: 18 },
-    { id: 'premix', nom: 'Premix / alcopop (27,5 cl, 5,5 %)', vol: 275, deg: 5.5 },
-    { id: 'libre', nom: 'Saisie libre…', vol: 0, deg: 0 }
-  ];
-
   var REPAS = [
     { id: 'jeun', nom: 'À jeun', duree: 30, frac: 1.0 },
     { id: 'leger', nom: 'Repas léger', duree: 60, frac: 0.95 },
@@ -124,7 +106,7 @@
   }
 
   var api = {
-    BOISSONS: BOISSONS, REPAS: REPAS, SEUILS: SEUILS, DENSITE: DENSITE,
+    REPAS: REPAS, SEUILS: SEUILS, DENSITE: DENSITE,
     gramsAlcool: gramsAlcool, coefficientR: coefficientR, simuler: simuler,
     valeurA: valeurA, instantSousSeuil: instantSousSeuil, niveau: niveau
   };

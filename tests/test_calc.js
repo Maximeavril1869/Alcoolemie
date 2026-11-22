@@ -23,3 +23,12 @@ assert(C.instantSousSeuil(sim,0.8)===null,'0.8 jamais atteint');
 assert(C.valeurA(sim, t0-3600000)===0 && C.valeurA(sim, sim.fin+3600000)===0, 'hors plage');
 assert(C.niveau(0.1)===0&&C.niveau(0.3)===1&&C.niveau(0.6)===2&&C.niveau(0.9)===3,'niveaux');
 console.log('pic', sim.pic.c.toFixed(3), 'duree h', dureeH.toFixed(2), 'tout OK');
+
+// Catalogue de boissons
+const B = require('../boissons.js');
+const ids = new Set();
+B.groupes.forEach(g => g.items.forEach(b => {
+  assert(!ids.has(b.id), 'id unique ' + b.id); ids.add(b.id);
+  if (!b.libre) { assert(b.deg > 0 && b.deg < 96, 'degre ' + b.id); assert(b.f.length > 0 && b.f.every(f => f.vol > 0), 'formats ' + b.id); }
+}));
+console.log('catalogue', ids.size, 'boissons OK');

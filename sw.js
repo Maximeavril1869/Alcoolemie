@@ -1,6 +1,6 @@
 /* Service worker : mise en cache pour un usage hors ligne. */
-var CACHE = 'alcoolemie-v1';
-var FICHIERS = ['./', 'index.html', 'style.css', 'calc.js', 'app.js', 'manifest.webmanifest',
+var CACHE = 'alcoolemie-v2';
+var FICHIERS = ['./', 'index.html', 'style.css', 'boissons.js', 'calc.js', 'app.js', 'manifest.webmanifest',
   'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', function (e) {

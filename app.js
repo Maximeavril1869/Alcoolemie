@@ -165,11 +165,34 @@
 
   /* ---------- Formulaires ---------- */
   function initFormulaires() {
-    var sel = $('boisson');
-    C.BOISSONS.forEach(function (b) {
-      var o = document.createElement('option'); o.value = b.id; o.textContent = b.nom; sel.appendChild(o);
+    var sel = $('boisson'), fmtSel = $('format');
+    var parId = {};
+    window.AlcoBoissons.groupes.forEach(function (g) {
+      var og = document.createElement('optgroup'); og.label = g.nom;
+      g.items.forEach(function (b) {
+        parId[b.id] = b;
+        var o = document.createElement('option'); o.value = b.id;
+        o.textContent = b.nom + (b.v === false ? ' *' : '');
+        og.appendChild(o);
+      });
+      sel.appendChild(og);
     });
-    sel.onchange = function () { $('libre').classList.toggle('cache', sel.value !== 'libre'); };
+    function majLibre() { $('libre').classList.toggle('cache', fmtSel.value !== 'autre'); }
+    function majBoisson() {
+      var b = parId[sel.value];
+      fmtSel.innerHTML = '';
+      b.f.forEach(function (f) {
+        var o = document.createElement('option'); o.value = String(f.vol); o.textContent = f.l; fmtSel.appendChild(o);
+      });
+      var autre = document.createElement('option'); autre.value = 'autre'; autre.textContent = 'Autre volume…';
+      fmtSel.appendChild(autre);
+      if (b.libre) fmtSel.value = 'autre';
+      $('deg').value = b.deg || '';
+      $('note-boisson').textContent = b.note || (b.v === false ? '* Degré indicatif : vérifie l\'étiquette.' : '');
+      majLibre();
+    }
+    sel.onchange = majBoisson; fmtSel.onchange = majLibre;
+    majBoisson();
 
     var rp = $('repas');
     C.REPAS.forEach(function (r) {
@@ -179,14 +202,14 @@
     $('heure').value = heure(Date.now());
 
     $('btn-ajout').onclick = function () {
-      var b = C.BOISSONS.filter(function (x) { return x.id === sel.value; })[0];
-      var vol = b.vol, deg = b.deg, nom = b.nom;
-      if (b.id === 'libre') {
-        vol = parseFloat($('libre-vol').value) * 10; deg = parseFloat($('libre-deg').value);
-        nom = 'Boisson libre (' + fmt(vol / 10, 1) + ' cl, ' + fmt(deg, 1) + ' %)';
-      }
+      var b = parId[sel.value];
+      var deg = parseFloat($('deg').value);
+      var libreVol = fmtSel.value === 'autre';
+      var vol = libreVol ? parseFloat($('libre-vol').value) * 10 : parseFloat(fmtSel.value);
       var n = parseInt($('quantite').value, 10);
       if (!(vol > 0) || !(deg > 0) || !(n > 0)) { alert('Volume, degré et quantité doivent être positifs.'); return; }
+      var libelleVol = libreVol ? fmt(vol / 10, 1) + ' cl' : fmtSel.options[fmtSel.selectedIndex].text;
+      var nom = (b.libre ? 'Boisson libre' : b.nom) + ' (' + libelleVol + ', ' + fmt(deg, 1) + ' %)';
       var hm = ($('heure').value || heure(Date.now())).split(':');
       var d = new Date(); d.setHours(parseInt(hm[0], 10), parseInt(hm[1], 10), 0, 0);
       if (d.getTime() > Date.now() + 2 * MIN) d.setDate(d.getDate() - 1); // heure future = la veille

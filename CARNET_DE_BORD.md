@@ -12,6 +12,14 @@ Où en est le projet : la version 1 est écrite, testée et poussée sur la bran
 - Rédaction du README, de l'architecture et du guide des raccourcis.
 - Poussée de la version 1 sur main. L'activation de GitHub Pages n'est pas possible depuis l'environnement de développement : à faire dans Settings > Pages (branche main, dossier racine).
 
+## 2026-11-22 (suite)
+
+- Demande : 50 cl de Leffe et 50 cl de Guinness n'ont pas le même degré, et le vin doit se saisir avec le degré de la bouteille.
+- Ajout d'un catalogue de marques (`boissons.js`, 66 entrées) : bières, cidres, vins, apéritifs, spiritueux, cocktails. Chaque boisson propose des formats usuels et un degré prérempli modifiable.
+- Degrés vérifiés sur des sites de marques ou de distributeurs, sauf ceux marqués d'un astérisque (indicatifs). Point d'attention : Leffe Brune, 6,5 % selon le site Leffe France, 4,3 % selon une autre fiche ; la valeur retenue est 6,5 %.
+- Les vins, champagne et crémants sont préremplis avec une valeur moyenne et un rappel de saisir le degré de la bouteille.
+- Test dans un navigateur : le degré se préremplit selon la marque et reste modifiable, sans erreur.
+
 ## À faire
 
 - Activer GitHub Pages (Settings > Pages, branche main, racine).
