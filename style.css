@@ -47,3 +47,12 @@ canvas { width: 100%; display: block; }
 .avertissement { color: var(--discret); font-size: 12px; text-align: center; padding: 0 8px; }
 details summary { color: var(--accent); cursor: pointer; margin: 6px 0 10px; }
 .n0 { color: var(--n0); } .n1 { color: var(--n1); } .n2 { color: var(--n2); } .n3 { color: var(--n3); }
+
+/* Menus repliables */
+details.carte > summary { cursor: pointer; font-size: 17px; font-weight: 600; color: var(--texte); margin: 0;
+  list-style: none; display: flex; align-items: center; justify-content: space-between; }
+details.carte > summary::-webkit-details-marker { display: none; }
+details.carte > summary::after { content: '›'; font-size: 24px; line-height: 1; color: var(--discret);
+  transform: rotate(90deg); transition: transform .15s; }
+details.carte[open] > summary { margin-bottom: 12px; }
+details.carte[open] > summary::after { transform: rotate(-90deg); }

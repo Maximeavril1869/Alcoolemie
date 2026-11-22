@@ -31,8 +31,8 @@
     <ul id="seuils" class="seuils"></ul>
   </section>
 
-  <section class="carte">
-    <h2>Ajouter un verre</h2>
+  <details class="carte">
+    <summary>Ajouter un verre</summary>
     <label>Boisson
       <select id="boisson"></select>
     </label>
@@ -49,16 +49,16 @@
       <label>Heure<input id="heure" type="time"></label>
     </div>
     <button id="btn-ajout" class="principal">Ajouter</button>
-  </section>
+  </details>
 
-  <section class="carte">
-    <h2>Verres de la soirée</h2>
+  <details class="carte">
+    <summary id="sum-liste">Verres de la soirée</summary>
     <ul id="liste" class="liste"></ul>
     <p id="liste-vide" class="discret">Aucun verre pour l'instant.</p>
-  </section>
+  </details>
 
-  <section class="carte">
-    <h2>Profil et repas</h2>
+  <details class="carte">
+    <summary>Profil et repas</summary>
     <div class="ligne">
       <label>Sexe
         <select id="sexe"><option value="H">Homme</option><option value="F">Femme</option></select>
@@ -85,10 +85,10 @@
       </label>
       <p class="discret">0,10 : lent · 0,15 : moyen · 0,20 et plus : rapide. Mieux vaut rester prudent.</p>
     </details>
-  </section>
+  </details>
 
-  <section class="carte">
-    <h2>Apple Santé</h2>
+  <details class="carte">
+    <summary>Apple Santé</summary>
     <p class="discret">Passe par l'app Raccourcis. Les deux raccourcis sont à créer une fois (voir le guide dans le dépôt).</p>
     <div class="ligne">
       <button id="btn-lire" class="secondaire">Lire poids et taille</button>
@@ -96,7 +96,7 @@
     </div>
     <button id="btn-coller" class="lien">Coller « poids;taille » depuis le presse-papiers</button>
     <p id="sante-info" class="discret"></p>
-  </section>
+  </details>
 
   <p id="stockage" class="discret" style="text-align:center"></p>
 

@@ -175,6 +175,7 @@
       li.appendChild(txt); li.appendChild(b); liste.appendChild(li);
     });
     $('liste-vide').style.display = etat.verres.length ? 'none' : 'block';
+    $('sum-liste').textContent = 'Verres de la soirée' + (etat.verres.length ? ' (' + etat.verres.length + ')' : '');
 
     dessiner(sim, maintenant);
   }

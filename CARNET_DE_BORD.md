@@ -38,6 +38,12 @@ Où en est le projet : la version 1 est écrite, testée et poussée sur la bran
 - Ajout d'une ligne d'état en bas de l'écran : données retrouvées au lancement ou non, heure de la dernière sauvegarde, stockage bloqué ou non, stockage permanent accordé ou non.
 - À vérifier sur l'iPhone : fermer puis rouvrir l'app et lire la ligne d'état.
 
+## 2026-11-22 (menus repliables)
+
+- Les cartes « Ajouter un verre », « Verres de la soirée », « Profil et repas » et « Apple Santé » deviennent des menus repliables, fermés au lancement. La carte du taux et du graphique reste toujours visible.
+- Le titre « Verres de la soirée » affiche le nombre de verres.
+- Travail sur la branche `menus-repliables`, en attente de validation avant fusion dans `main`.
+
 ## À faire
 
 - Activer GitHub Pages (Settings > Pages, branche main, racine).
