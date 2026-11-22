@@ -16,15 +16,77 @@
       verres: []
     };
   }
+  var trouveAuLancement = false;   // des données ont-elles été retrouvées dans localStorage ?
+  var persistant = null;           // stockage marqué « persistant » par l'iPhone ?
+  var dernierEtatStockage = null;  // true / false après une écriture
+
   function charger() {
     try {
       var brut = localStorage.getItem(CLE);
-      if (brut) return Object.assign(defaut(), JSON.parse(brut));
+      if (brut) { trouveAuLancement = true; return Object.assign(defaut(), JSON.parse(brut)); }
     } catch (e) { /* stockage indisponible */ }
     return defaut();
   }
+
+  // Copie de secours dans IndexedDB (autre mécanisme de stockage du navigateur)
+  function ouvrirIdb() {
+    return new Promise(function (res, rej) {
+      if (!window.indexedDB) { rej(new Error('pas d\'IndexedDB')); return; }
+      var r = indexedDB.open('alcoolemie', 1);
+      r.onupgradeneeded = function () { r.result.createObjectStore('kv'); };
+      r.onsuccess = function () { res(r.result); };
+      r.onerror = function () { rej(r.error); };
+    });
+  }
+  function ecrireIdb(json) {
+    return ouvrirIdb().then(function (db) {
+      return new Promise(function (res, rej) {
+        var tx = db.transaction('kv', 'readwrite');
+        tx.objectStore('kv').put(json, 'etat');
+        tx.oncomplete = res; tx.onerror = function () { rej(tx.error); };
+      });
+    }).catch(function () { /* ignoré */ });
+  }
+  function lireIdb() {
+    return ouvrirIdb().then(function (db) {
+      return new Promise(function (res, rej) {
+        var rq = db.transaction('kv', 'readonly').objectStore('kv').get('etat');
+        rq.onsuccess = function () { res(rq.result || null); };
+        rq.onerror = function () { rej(rq.error); };
+      });
+    }).catch(function () { return null; });
+  }
+
   function sauver() {
-    try { localStorage.setItem(CLE, JSON.stringify(etat)); } catch (e) { /* ignoré */ }
+    var json = JSON.stringify(etat);
+    var ok = false;
+    try { localStorage.setItem(CLE, json); ok = localStorage.getItem(CLE) === json; } catch (e) { ok = false; }
+    dernierEtatStockage = ok;
+    ecrireIdb(json);
+    majStatut();
+  }
+
+  function majStatut() {
+    var el = document.getElementById('stockage');
+    if (!el) return;
+    var hm = new Date(); var h = ('0' + hm.getHours()).slice(-2) + ':' + ('0' + hm.getMinutes()).slice(-2);
+    var txt;
+    if (dernierEtatStockage === false) txt = '⚠ Stockage bloqué : les données risquent de ne pas être conservées.';
+    else if (dernierEtatStockage === true) txt = 'Données enregistrées sur cet appareil à ' + h + '.';
+    else txt = trouveAuLancement ? 'Données retrouvées au lancement.' : 'Aucune donnée retrouvée au lancement (premier lancement ou stockage vidé).';
+    if (persistant === true) txt += ' Stockage permanent : oui.';
+    else if (persistant === false) txt += ' Stockage permanent : non accordé.';
+    el.textContent = txt;
+  }
+
+  function remplirChamps() {
+    $('sexe').value = etat.profil.sexe || 'H';
+    $('age').value = etat.profil.age || '';
+    $('poids').value = etat.profil.poids || '';
+    $('taille').value = etat.profil.taille || '';
+    $('repas').value = etat.repas;
+    $('methode').value = etat.methode;
+    $('beta').value = etat.beta; $('beta-aff').textContent = fmt(etat.beta);
   }
   function $(id) { return document.getElementById(id); }
 
@@ -231,6 +293,7 @@
         etat.profil[k] = k === 'sexe' ? el.value : (parseFloat(el.value) || 0);
         sauver(); rendre();
       };
+      el.oninput = el.onchange; // enregistre à chaque frappe, sans attendre de quitter le champ
     });
     rp.value = etat.repas; rp.onchange = function () { etat.repas = rp.value; sauver(); rendre(); };
     $('methode').value = etat.methode;
@@ -292,8 +355,29 @@
   initFormulaires();
   initSante();
   rendre();
+  majStatut();
+
+  // Si localStorage a été vidé, on tente de récupérer la copie de secours.
+  if (!trouveAuLancement) {
+    lireIdb().then(function (json) {
+      if (!json) return;
+      try {
+        etat = Object.assign(defaut(), JSON.parse(json));
+        trouveAuLancement = true;
+        remplirChamps(); sauver(); rendre();
+      } catch (e) { /* copie illisible */ }
+    });
+  }
+  // Demande à l'iPhone de ne pas purger le stockage de l'app.
+  if (navigator.storage && navigator.storage.persist) {
+    navigator.storage.persist().then(function (p) { persistant = p; majStatut(); }, function () {});
+  }
+
   setInterval(rendre, 30000);
   window.addEventListener('resize', rendre);
-  document.addEventListener('visibilitychange', function () { if (!document.hidden) rendre(); });
+  window.addEventListener('pagehide', sauver);
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) sauver(); else rendre();
+  });
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
 })();

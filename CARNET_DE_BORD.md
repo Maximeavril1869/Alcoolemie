@@ -31,6 +31,13 @@ Où en est le projet : la version 1 est écrite, testée et poussée sur la bran
 - Le texte reçu par le raccourci « Alcoolemie Ecrire » devient un nombre avec l'action « Obtenir des nombres de l'entrée ».
 - Pour éviter les erreurs de virgule ou de point sur un iPhone en français, l'app envoie maintenant deux entiers (`420;3`) et le raccourci divise par 10000. Guide mis à jour.
 
+## 2026-11-22 (perte de données à la fermeture)
+
+- Constat : depuis l'icône de l'écran d'accueil, profil, verres et réglages disparaissent à chaque fermeture de l'app. Cause non identifiée.
+- Renforcement : enregistrement à chaque frappe et à chaque mise en arrière-plan, copie de secours dans IndexedDB restaurée automatiquement si localStorage est vide, demande de stockage permanent à l'iPhone.
+- Ajout d'une ligne d'état en bas de l'écran : données retrouvées au lancement ou non, heure de la dernière sauvegarde, stockage bloqué ou non, stockage permanent accordé ou non.
+- À vérifier sur l'iPhone : fermer puis rouvrir l'app et lire la ligne d'état.
+
 ## À faire
 
 - Activer GitHub Pages (Settings > Pages, branche main, racine).
