@@ -1,5 +1,5 @@
 /* Service worker : mise en cache pour un usage hors ligne. */
-var CACHE = 'alcoolemie-v6';
+var CACHE = 'alcoolemie-v7';
 var FICHIERS = ['./', 'index.html', 'style.css', 'boissons.js', 'calc.js', 'app.js', 'manifest.webmanifest',
   'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png'];
 

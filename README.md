@@ -1,6 +1,6 @@
 # Alcoolémie
 
-Version actuelle : 1.3.0 (affichée aussi en bas de l'écran de l'app).
+Version actuelle : 1.3.1 (affichée aussi en bas de l'écran de l'app).
 
 Calculette d'alcoolémie personnelle, en PWA locale pour iPhone et iPad. Tout reste sur l'appareil, rien n'est envoyé nulle part.
 

@@ -6,7 +6,7 @@
   var MIN = 60000;
   var SHORTCUT_LIRE = 'Alcoolemie Lire';
   var SHORTCUT_ECRIRE = 'Alcoolemie Ecrire';
-  var VERSION = '1.3.0';
+  var VERSION = '1.3.1';
   var SCHEMA = 2; // 2 : élimination par défaut 0,10 et dernière soirée conservée
 
   var etat = charger();

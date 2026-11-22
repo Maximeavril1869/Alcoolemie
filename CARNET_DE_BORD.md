@@ -1,6 +1,6 @@
 # Carnet de bord
 
-Où en est le projet : version 1.3.0 poussée sur main. L'écriture dans Santé a été refaite (envoi unique à la clôture de la soirée) ; il reste à refaire le raccourci « Alcoolemie Ecrire » sur l'iPhone selon `docs/RACCOURCIS.md` et à le tester.
+Où en est le projet : version 1.3.1 poussée sur main. L'écriture dans Santé a été refaite (envoi unique à la clôture de la soirée) ; il reste à refaire le raccourci « Alcoolemie Ecrire » sur l'iPhone selon `docs/RACCOURCIS.md` et à le tester.
 
 ## 2026-11-22
 
@@ -62,6 +62,12 @@ Où en est le projet : version 1.3.0 poussée sur main. L'écriture dans Santé 
 - Affichage du nombre de verres standard (10 g) à côté du taux. Affichage de la version en bas de l'écran. Cache du service worker passé en v6.
 - Guide `docs/RACCOURCIS.md` réécrit pour le nouveau raccourci (boucle sur les lignes, date = maintenant moins les minutes). Types Santé : l'action « Enregistrer un échantillon de santé » accepte une date ; son champ « Type » n'accepte pas de variable, d'où le Si / Sinon.
 - Testé dans un navigateur de test : migration, verres standard, boîte de dialogue, conservation de la dernière soirée, aucune erreur. Non testé : le raccourci lui-même et l'écriture réelle dans Santé (à faire sur l'iPhone).
+
+## 2026-11-22 (version 1.3.1 : positionnement en haut de l'écran)
+
+- Constat : sur l'iPhone, le haut de l'app était flou (barre d'état translucide au-dessus du contenu).
+- Comparaison avec 5rois, 6quiprend, Flip7 et LeContrat : tous utilisent la barre d'état `default` et un décalage haut de `env(safe-area-inset-top) + 28px`.
+- Alignement d'Alcoolemie sur ce réglage. Le style de barre d'état est lu à l'installation : pour qu'il change, supprimer l'app de l'écran d'accueil puis la réinstaller depuis Safari.
 
 ## À faire
 
