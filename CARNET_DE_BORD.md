@@ -22,9 +22,9 @@ Où en est le projet : la version 1 est écrite, testée et poussée sur la bran
 
 ## 2026-11-22 (ajouts de marques)
 
-- Ajout de Super Bock (5,2 %, version vendue en France), de Menthe-Pastille Giffard (24 %), de Ricard Amande bio (45 %) et de Ricard prêt à boire (4,5 %, 20 cl).
+- Ajout de Super Bock (5,2 %, version vendue en France), de Menthe-Pastille Giffard (24 %), et de Ricard Amande bio (45 %).
 - Correction : Get 27 passe de 21 % à 17,9 %, valeur actuelle des étiquettes françaises.
-- Point ouvert : le produit « Ricard Amande Orgeat » n'a pas été retrouvé sous ce nom. Les deux candidats sont ajoutés en attendant confirmation.
+- Précision : le produit voulu est Ricard Amande bio (45 %). L'entrée « Ricard prêt à boire » a été retirée.
 
 ## À faire
 

@@ -88,7 +88,6 @@
       items: [
         b('ricard', 'Ricard', 45, F_PASTIS),
         b('ricard-amande', 'Ricard Amande bio (anis vert et amande)', 45, F_PASTIS),
-        b('ricard-pret', 'Ricard prêt à boire 4,5 %', 4.5, [{ l: 'Bouteille 20 cl', vol: 200 }]),
         b('pastis51', 'Pastis 51', 45, F_PASTIS),
         b('aperol', 'Aperol', 11, F_APERO),
         b('campari', 'Campari', 25, F_APERO),
