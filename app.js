@@ -132,10 +132,19 @@
     else if (niv === 1) msg = 'Entre 0,2 et 0,5 g/L : au-dessus de la limite des permis probatoires.';
     else if (niv === 2) msg = 'Entre 0,5 et 0,8 g/L : au-dessus de la limite légale pour conduire.';
     else msg = 'Au-dessus de 0,8 g/L : délit en cas de conduite.';
-    if (profilOk && sim.pic && sim.pic.c > 0 && maintenant < sim.pic.t) {
-      msg += ' Le pic attendu est de ' + fmt(sim.pic.c) + ' g/L vers ' + heure(sim.pic.t) + '.';
-    }
     $('message').textContent = msg;
+
+    var pt = $('pic-theo');
+    if (profilOk && etat.verres.length && sim.pic) {
+      var max = C.picTheorique(etat.verres, etat.profil, { methode: etat.methode });
+      var t = 'Pic estimé : ' + fmt(sim.pic.c) + ' g/L vers ' + heure(sim.pic.t) +
+        '. Maximum théorique, sans aucune élimination : ' + fmt(max) + ' g/L.';
+      if (max >= 0.5) t += ' Ce maximum dépasse 0,5 g/L : marge insuffisante pour conduire.';
+      pt.textContent = t;
+      pt.className = 'discret' + (max >= 0.5 ? ' n2' : '');
+    } else {
+      pt.textContent = '';
+    }
 
     // Seuils
     var ul = $('seuils'); ul.innerHTML = '';

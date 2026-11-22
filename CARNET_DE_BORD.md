@@ -44,6 +44,12 @@ Où en est le projet : la version 1 est écrite, testée et poussée sur la bran
 - Le titre « Verres de la soirée » affiche le nombre de verres.
 - Validé par l'utilisateur et fusionné dans `main`. La branche distante `menus-repliables` n'a pas pu être supprimée depuis l'environnement de développement : à supprimer sur GitHub.
 
+## 2026-11-22 (maximum théorique)
+
+- Constat : avec 4 Ricard de 2 cl, le pic estimé (0,45 g/L) reste sous 0,5 alors que le calcul brut, sans élimination, donne 0,54 g/L. Le pic estimé suppose une élimination dès le début de l'absorption, ce qui l'abaisse.
+- Ajout d'une ligne sous le taux : pic estimé et maximum théorique sans aucune élimination, avec un avertissement orange si ce maximum dépasse 0,5 g/L.
+- À traiter ensuite : l'écriture dans Santé, qui n'est pas concluante pour l'instant.
+
 ## À faire
 
 - Activer GitHub Pages (Settings > Pages, branche main, racine).

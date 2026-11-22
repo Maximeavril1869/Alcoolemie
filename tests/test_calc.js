@@ -32,3 +32,11 @@ B.groupes.forEach(g => g.items.forEach(b => {
   if (!b.libre) { assert(b.deg > 0 && b.deg < 96, 'degre ' + b.id); assert(b.f.length > 0 && b.f.every(f => f.vol > 0), 'formats ' + b.id); }
 }));
 console.log('catalogue', ids.size, 'boissons OK');
+
+// Maximum théorique : 4 Ricard 2 cl, homme 75 kg, r = 0,7 -> 28,8 g / 52,5 = 0,549
+const ricard = {t: t0, vol: 20, deg: 45, n: 4};
+const max = C.picTheorique([ricard], p, {methode:'widmark'});
+assert(Math.abs(max - 28.8/(0.7*75)) < 1e-9, 'pic theorique ' + max);
+const simR = C.simuler([ricard], p, {methode:'widmark',beta:0.15,repas:'jeun'});
+assert(simR.pic.c < max, 'pic estime sous le maximum theorique');
+console.log('maximum theorique', max.toFixed(3), 'pic estime', simR.pic.c.toFixed(3), 'OK');

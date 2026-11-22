@@ -78,6 +78,16 @@
     return { points: points, pic: pic, debut: debut * MIN, fin: points[points.length - 1].t };
   }
 
+  /* Maximum théorique : toute la quantité d'alcool dans le sang d'un coup, sans aucune élimination
+   * ni effet du repas. Sert de garde-fou : le pic estimé de simuler() est toujours en dessous. */
+  function picTheorique(drinks, profil, opts) {
+    if (!drinks.length || !(profil.poids > 0)) return 0;
+    var r = coefficientR(profil, opts.methode);
+    var g = 0;
+    drinks.forEach(function (d) { g += gramsAlcool(d.vol, d.deg) * (d.n || 1); });
+    return g / (r * profil.poids);
+  }
+
   function valeurA(sim, tMs) {
     if (!sim.points.length || tMs < sim.debut) return 0;
     if (tMs > sim.fin) return 0;
@@ -107,7 +117,7 @@
 
   var api = {
     REPAS: REPAS, SEUILS: SEUILS, DENSITE: DENSITE,
-    gramsAlcool: gramsAlcool, coefficientR: coefficientR, simuler: simuler,
+    gramsAlcool: gramsAlcool, coefficientR: coefficientR, simuler: simuler, picTheorique: picTheorique,
     valeurA: valeurA, instantSousSeuil: instantSousSeuil, niveau: niveau
   };
   root.AlcoCalc = api;
