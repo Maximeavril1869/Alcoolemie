@@ -274,8 +274,9 @@
       var sim = simulation();
       var c = etat.profil.poids > 0 ? C.valeurA(sim, Date.now()) : 0;
       var verres = etat.verres.reduce(function (s, v) { return s + v.n; }, 0);
-      // Santé stocke l'alcoolémie en pourcentage : 0,5 g/L = 0,05 %
-      var texte = (c / 10).toFixed(4) + ';' + verres;
+      // Entier en mg/L (0,42 g/L = 420) pour éviter tout souci de virgule ou de point dans Raccourcis.
+      // Le raccourci divise par 10000 pour obtenir le pourcentage attendu par Santé (0,042 %).
+      var texte = Math.round(c * 1000) + ';' + verres;
       location.href = 'shortcuts://run-shortcut?name=' + encodeURIComponent(SHORTCUT_ECRIRE) +
         '&input=text&text=' + encodeURIComponent(texte);
     };

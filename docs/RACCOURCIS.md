@@ -14,13 +14,16 @@ Deux raccourcis à créer une seule fois dans l'app Raccourcis. Les noms doivent
 
 ## 2. « Alcoolemie Ecrire » (alcoolémie et verres vers Santé)
 
-L'app envoie un texte `pourcentage;verres`, par exemple `0,0420;3`.
+L'app envoie un texte `mg/L;verres` avec deux entiers, par exemple `420;3` (0,42 g/L et 3 verres). Pas de virgule ni de point : cela évite les erreurs de séparateur décimal.
 
 1. **Diviser le texte** (entrée du raccourci) avec le séparateur personnalisé `;`.
-2. **Obtenir l'élément de la liste** : premier élément, puis **Convertir en nombre**.
-3. **Enregistrer un échantillon de santé** : type Taux d'alcool dans le sang, valeur = ce nombre, unité %.
-4. **Obtenir l'élément de la liste** : dernier élément, puis **Convertir en nombre**.
-5. **Enregistrer un échantillon de santé** : type Nombre de boissons alcoolisées, valeur = ce nombre.
+2. **Obtenir l'élément de la liste** : premier élément.
+3. **Obtenir des nombres de l'entrée** : c'est l'action qui transforme le texte en nombre (il n'existe pas d'action « Convertir en nombre »).
+4. **Calculer** : le nombre ÷ 10000. Exemple : 420 devient 0,042.
+5. **Enregistrer un échantillon de santé** : type Taux d'alcool dans le sang, valeur = résultat du calcul, unité %.
+6. **Obtenir l'élément de la liste** (à partir de l'action Diviser) : dernier élément.
+7. **Obtenir des nombres de l'entrée**.
+8. **Enregistrer un échantillon de santé** : type Nombre de boissons alcoolisées, valeur = ce nombre.
 
 ## Points à vérifier à la première utilisation
 

@@ -44,6 +44,6 @@ Formulaires ──> état (profil, verres, réglages) ──> localStorage (clé
 Une PWA n'a pas accès à HealthKit. L'échange passe par l'app Raccourcis, appelée via son schéma d'URL :
 
 - Lecture : `shortcuts://x-callback-url/run-shortcut?name=Alcoolemie Lire&x-success=…?result=` ; le raccourci renvoie `poids;taille`. Repli : le raccourci copie aussi le résultat, et le bouton « Coller » le lit dans le presse-papiers.
-- Écriture : `shortcuts://run-shortcut?name=Alcoolemie Ecrire&input=text&text=pourcentage;verres`. L'alcoolémie est envoyée en pourcentage (0,5 g/L = 0,05 %).
+- Écriture : `shortcuts://run-shortcut?name=Alcoolemie Ecrire&input=text&text=mgL;verres`. L'alcoolémie est envoyée en entier (0,42 g/L = 420), le raccourci divise par 10000 pour obtenir le pourcentage de Santé.
 
 Le sexe et l'âge ne sont pas lisibles par les raccourcis et restent saisis à la main.

@@ -26,6 +26,11 @@ Où en est le projet : la version 1 est écrite, testée et poussée sur la bran
 - Correction : Get 27 passe de 21 % à 17,9 %, valeur actuelle des étiquettes françaises.
 - Précision : le produit voulu est Ricard Amande bio (45 %). L'entrée « Ricard prêt à boire » a été retirée.
 
+## 2026-11-22 (raccourci Santé)
+
+- Le texte reçu par le raccourci « Alcoolemie Ecrire » devient un nombre avec l'action « Obtenir des nombres de l'entrée ».
+- Pour éviter les erreurs de virgule ou de point sur un iPhone en français, l'app envoie maintenant deux entiers (`420;3`) et le raccourci divise par 10000. Guide mis à jour.
+
 ## À faire
 
 - Activer GitHub Pages (Settings > Pages, branche main, racine).
