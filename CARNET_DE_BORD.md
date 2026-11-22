@@ -20,6 +20,12 @@ Où en est le projet : la version 1 est écrite, testée et poussée sur la bran
 - Les vins, champagne et crémants sont préremplis avec une valeur moyenne et un rappel de saisir le degré de la bouteille.
 - Test dans un navigateur : le degré se préremplit selon la marque et reste modifiable, sans erreur.
 
+## 2026-11-22 (ajouts de marques)
+
+- Ajout de Super Bock (5,2 %, version vendue en France), de Menthe-Pastille Giffard (24 %), de Ricard Amande bio (45 %) et de Ricard prêt à boire (4,5 %, 20 cl).
+- Correction : Get 27 passe de 21 % à 17,9 %, valeur actuelle des étiquettes françaises.
+- Point ouvert : le produit « Ricard Amande Orgeat » n'a pas été retrouvé sous ce nom. Les deux candidats sont ajoutés en attendant confirmation.
+
 ## À faire
 
 - Activer GitHub Pages (Settings > Pages, branche main, racine).

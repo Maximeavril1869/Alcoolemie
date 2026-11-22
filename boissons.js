@@ -4,7 +4,7 @@
  * f   : formats proposés (vol en mL).
  * Degrés vérifiés en novembre 2026 sur les sites des marques ou de distributeurs (Leffe, Guinness, Kronenbourg,
  * 1664, Heineken, Stella Artois, Desperados, Pelforth, Affligem, Grimbergen, Duvel, Delirium, Kwak, Chouffe,
- * Chimay, Ricard, Pastis 51, Aperol, Campari, Baileys, Malibu, Get, Jägermeister, Loïc Raison). */
+ * Chimay, Super Bock, Ricard, Pastis 51, Menthe-Pastille, Aperol, Campari, Baileys, Malibu, Get, Jägermeister, Loïc Raison). */
 (function (root) {
   'use strict';
 
@@ -41,6 +41,7 @@
         b('1664', '1664 Blonde', 5.5, F_BIERE),
         b('1664-blanc', '1664 Blanc', 5, F_BIERE),
         b('stella', 'Stella Artois', 5.2, F_BIERE),
+        b('superbock', 'Super Bock', 5.2, F_BIERE),
         b('desperados', 'Desperados Original', 5.9, F_BIERE),
         b('pelforth-blonde', 'Pelforth Blonde', 5.8, F_BIERE),
         b('pelforth-brune', 'Pelforth Brune', 6.5, F_BIERE),
@@ -86,12 +87,15 @@
       nom: 'Apéritifs et liqueurs',
       items: [
         b('ricard', 'Ricard', 45, F_PASTIS),
+        b('ricard-amande', 'Ricard Amande bio (anis vert et amande)', 45, F_PASTIS),
+        b('ricard-pret', 'Ricard prêt à boire 4,5 %', 4.5, [{ l: 'Bouteille 20 cl', vol: 200 }]),
         b('pastis51', 'Pastis 51', 45, F_PASTIS),
         b('aperol', 'Aperol', 11, F_APERO),
         b('campari', 'Campari', 25, F_APERO),
         b('baileys', 'Baileys', 17, F_APERO),
         b('malibu', 'Malibu', 21, F_APERO),
-        b('get27', 'Get 27', 21, F_DOSE),
+        b('menthe-pastille', 'Menthe-Pastille Giffard', 24, F_DOSE),
+        b('get27', 'Get 27', 17.9, F_DOSE),
         b('get31', 'Get 31', 24, F_DOSE),
         b('jager', 'Jägermeister', 35, F_DOSE),
         b('martini', 'Martini (blanc ou rouge)', 14.4, F_APERO, { v: false }),
