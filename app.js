@@ -6,14 +6,16 @@
   var MIN = 60000;
   var SHORTCUT_LIRE = 'Alcoolemie Lire';
   var SHORTCUT_ECRIRE = 'Alcoolemie Ecrire';
+  var VERSION = '1.3.0';
+  var SCHEMA = 2; // 2 : élimination par défaut 0,10 et dernière soirée conservée
 
   var etat = charger();
 
   function defaut() {
     return {
       profil: { sexe: 'H', poids: 0, taille: 0, age: 0 },
-      repas: 'jeun', methode: 'watson', beta: 0.15,
-      verres: []
+      repas: 'jeun', methode: 'watson', beta: 0.10,
+      verres: [], derniereSoiree: null, schema: SCHEMA
     };
   }
   var trouveAuLancement = false;   // des données ont-elles été retrouvées dans localStorage ?
@@ -23,9 +25,16 @@
   function charger() {
     try {
       var brut = localStorage.getItem(CLE);
-      if (brut) { trouveAuLancement = true; return Object.assign(defaut(), JSON.parse(brut)); }
+      if (brut) { trouveAuLancement = true; return hydrater(JSON.parse(brut)); }
     } catch (e) { /* stockage indisponible */ }
     return defaut();
+  }
+
+  // Reprend un état enregistré ; migration unique vers l'élimination par défaut de 0,10 (schéma 2).
+  function hydrater(sauve) {
+    var e = Object.assign(defaut(), sauve);
+    if (!sauve.schema || sauve.schema < SCHEMA) { e.beta = 0.10; e.schema = SCHEMA; }
+    return e;
   }
 
   // Copie de secours dans IndexedDB (autre mécanisme de stockage du navigateur)
@@ -124,6 +133,8 @@
     $('valeur').textContent = fmt(c);
     $('valeur').className = 'valeur n' + niv;
     $('valeur-air').textContent = fmt(c / 2) + ' mg/L d\'air';
+    var gTotal = etat.verres.reduce(function (s, v) { return s + C.gramsAlcool(v.vol, v.deg) * v.n; }, 0);
+    $('verres-std').textContent = etat.verres.length ? '≈ ' + fmt(gTotal / 10, 1) + ' verres standard (10 g)' : '';
 
     var msg = '';
     if (!profilOk) msg = 'Renseigne ton poids dans « Profil et repas » pour calculer.';
@@ -186,6 +197,7 @@
     $('liste-vide').style.display = etat.verres.length ? 'none' : 'block';
     $('sum-liste').textContent = 'Verres de la soirée' + (etat.verres.length ? ' (' + etat.verres.length + ')' : '');
 
+    majDerniere();
     dessiner(sim, maintenant);
   }
 
@@ -290,9 +302,7 @@
       sauver(); rendre();
     };
 
-    $('btn-reset').onclick = function () {
-      if (confirm('Effacer les verres de la soirée ?')) { etat.verres = []; sauver(); rendre(); }
-    };
+    $('btn-reset').onclick = nouvelleSoiree;
 
     // Profil
     var champs = { sexe: 'sexe', age: 'age', poids: 'poids', taille: 'taille' };
@@ -330,6 +340,66 @@
     return ok;
   }
 
+  /* ---------- Clôture de la soirée et envoi vers Santé ---------- */
+  function dialogue(titre, texte, boutons) {
+    $('dlg-titre').textContent = titre;
+    $('dlg-texte').textContent = texte;
+    var zone = $('dlg-btns'); zone.innerHTML = '';
+    boutons.forEach(function (b) {
+      var el = document.createElement('button');
+      el.className = b.classe || 'secondaire'; el.textContent = b.l;
+      el.onclick = function () { $('dlg').classList.add('cache'); if (b.action) b.action(); };
+      zone.appendChild(el);
+    });
+    $('dlg').classList.remove('cache');
+  }
+
+  function exporter(verres) {
+    return C.exportSante(verres, etat.profil, { methode: etat.methode, beta: etat.beta, repas: etat.repas }, Date.now());
+  }
+
+  function resume(ex) {
+    var t = ex.nbVerres + ' verre' + (ex.nbVerres > 1 ? 's' : '') + ' (à leur heure réelle) et ' +
+      ex.nbTaux + ' point' + (ex.nbTaux > 1 ? 's' : '') + ' de taux (un toutes les 15 min) seront écrits dans Santé.';
+    if (!(etat.profil.poids > 0)) t += '\n\nPoids non renseigné : seuls les verres seront envoyés.';
+    else if (!ex.complet) t += '\n\n⚠ Le taux n\'est pas encore revenu à 0 (retour prévu à ' + jourHeure(ex.fin) +
+      '). La suite de la courbe ne sera pas envoyée et ne pourra pas être ajoutée plus tard.';
+    return t;
+  }
+
+  function lancerEcriture(texte) {
+    location.href = 'shortcuts://run-shortcut?name=' + encodeURIComponent(SHORTCUT_ECRIRE) +
+      '&input=text&text=' + encodeURIComponent(texte);
+  }
+
+  function cloturer(envoyee) {
+    var ex = exporter(etat.verres); // recalculé au moment du clic : les minutes sont relatives à l'instant de l'envoi
+    etat.derniereSoiree = { verres: etat.verres, envoyee: envoyee, le: Date.now() };
+    etat.verres = [];
+    sauver(); rendre();
+    if (envoyee) lancerEcriture(ex.texte);
+  }
+
+  function nouvelleSoiree() {
+    if (!etat.verres.length) { dialogue('Nouvelle soirée', 'Aucun verre à clôturer.', [{ l: 'OK', classe: 'principal' }]); return; }
+    var ex = exporter(etat.verres);
+    dialogue('Clôturer la soirée', resume(ex), [
+      { l: ex.complet ? 'Envoyer dans Santé et clôturer' : 'Envoyer quand même et clôturer', classe: 'principal', action: function () { cloturer(true); } },
+      { l: 'Clôturer sans envoyer', action: function () { cloturer(false); } },
+      { l: ex.complet ? 'Annuler' : 'Attendre', classe: 'lien' }
+    ]);
+  }
+
+  function majDerniere() {
+    var d = etat.derniereSoiree;
+    var p = $('derniere'), b = $('btn-renvoyer');
+    if (!d) { p.textContent = ''; b.classList.add('cache'); return; }
+    var n = d.verres.reduce(function (s, v) { return s + v.n; }, 0);
+    p.textContent = 'Dernière soirée : ' + n + ' verre' + (n > 1 ? 's' : '') + ', ' + (d.envoyee ? 'envoyée' : 'non envoyée') + ' dans Santé.';
+    b.textContent = d.envoyee ? 'Renvoyer la dernière soirée' : 'Envoyer la dernière soirée';
+    b.classList.remove('cache');
+  }
+
   function initSante() {
     $('btn-lire').onclick = function () {
       var retour = location.origin + location.pathname;
@@ -343,15 +413,14 @@
       if (!navigator.clipboard || !navigator.clipboard.readText) { info('Lecture du presse-papiers non disponible ici.'); return; }
       navigator.clipboard.readText().then(appliquerLecture, function () { info('Accès au presse-papiers refusé.'); });
     };
-    $('btn-ecrire').onclick = function () {
-      var sim = simulation();
-      var c = etat.profil.poids > 0 ? C.valeurA(sim, Date.now()) : 0;
-      var verres = etat.verres.reduce(function (s, v) { return s + v.n; }, 0);
-      // Entier en mg/L (0,42 g/L = 420) pour éviter tout souci de virgule ou de point dans Raccourcis.
-      // Le raccourci divise par 10000 pour obtenir le pourcentage attendu par Santé (0,042 %).
-      var texte = Math.round(c * 1000) + ';' + verres;
-      location.href = 'shortcuts://run-shortcut?name=' + encodeURIComponent(SHORTCUT_ECRIRE) +
-        '&input=text&text=' + encodeURIComponent(texte);
+    $('btn-renvoyer').onclick = function () {
+      var d = etat.derniereSoiree;
+      if (!d) return;
+      var ex = exporter(d.verres);
+      dialogue('Envoyer la dernière soirée',
+        resume(ex) + (d.envoyee ? '\n\nCette soirée a déjà été envoyée : un nouvel envoi crée des doublons dans Santé. À faire seulement si le premier envoi a échoué.' : ''),
+        [{ l: 'Envoyer dans Santé', classe: 'principal', action: function () { d.envoyee = true; sauver(); majDerniere(); lancerEcriture(exporter(d.verres).texte); } },
+         { l: 'Annuler', classe: 'lien' }]);
     };
     var p = new URLSearchParams(location.search);
     if (p.has('result')) {
@@ -366,13 +435,14 @@
   initSante();
   rendre();
   majStatut();
+  $('version').textContent = VERSION;
 
   // Si localStorage a été vidé, on tente de récupérer la copie de secours.
   if (!trouveAuLancement) {
     lireIdb().then(function (json) {
       if (!json) return;
       try {
-        etat = Object.assign(defaut(), JSON.parse(json));
+        etat = hydrater(JSON.parse(json));
         trouveAuLancement = true;
         remplirChamps(); sauver(); rendre();
       } catch (e) { /* copie illisible */ }

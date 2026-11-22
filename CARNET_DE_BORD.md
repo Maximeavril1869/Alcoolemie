@@ -1,6 +1,6 @@
 # Carnet de bord
 
-Où en est le projet : la version 1 est écrite, testée et poussée sur la branche main. Il reste à activer GitHub Pages, à installer la PWA sur l'iPhone et à créer les deux raccourcis.
+Où en est le projet : version 1.3.0 poussée sur main. L'écriture dans Santé a été refaite (envoi unique à la clôture de la soirée) ; il reste à refaire le raccourci « Alcoolemie Ecrire » sur l'iPhone selon `docs/RACCOURCIS.md` et à le tester.
 
 ## 2026-11-22
 
@@ -50,9 +50,24 @@ Où en est le projet : la version 1 est écrite, testée et poussée sur la bran
 - Ajout d'une ligne sous le taux : pic estimé et maximum théorique sans aucune élimination, avec un avertissement orange si ce maximum dépasse 0,5 g/L.
 - À traiter ensuite : l'écriture dans Santé, qui n'est pas concluante pour l'instant.
 
+## 2026-11-22 (version 1.3.0 : écriture dans Santé, option B)
+
+- Constat : l'ancien envoi écrivait un instantané (taux du moment et total de verres, tous datés de l'appui). Peu utile dans Santé.
+- Décision : un envoi unique à la clôture de la soirée (« Nouvelle soirée »). Le bouton « Écrire dans Santé » est supprimé. Chaque verre est écrit à son heure réelle ; le taux estimé est écrit toutes les 15 minutes, du premier verre jusqu'à maintenant (ou jusqu'au retour à 0).
+- Le taux juste après un verre est proche de 0 puis monte avec l'absorption : la courbe partant du premier verre rend bien cette montée, et le pic est le point le plus haut.
+- Limite assumée : seul le passé est écrit (Raccourcis ne peut pas corriger un point déjà écrit). Si le taux n'est pas revenu à 0 à la clôture, l'app prévient et propose d'attendre ; la suite de la courbe est perdue si on envoie quand même.
+- Format envoyé au raccourci : lignes `V;minutes;n` et `T;minutes;mgL`, avec des minutes avant maintenant (aucun format de date à interpréter). Fonction `exportSante()` dans `calc.js`, testée (`tests/test_calc.js`).
+- Ajout d'une boîte de dialogue de clôture (envoyer et clôturer / clôturer sans envoyer / annuler ou attendre) et conservation de la dernière soirée, avec un bouton pour la renvoyer si le raccourci a échoué.
+- Élimination par défaut ramenée à 0,10 g/L/h (plus prudent). Migration unique de l'état déjà enregistré (schéma 2) : le réglage passe à 0,10 une fois, à ajuster ensuite avec le curseur.
+- Affichage du nombre de verres standard (10 g) à côté du taux. Affichage de la version en bas de l'écran. Cache du service worker passé en v6.
+- Guide `docs/RACCOURCIS.md` réécrit pour le nouveau raccourci (boucle sur les lignes, date = maintenant moins les minutes). Types Santé : l'action « Enregistrer un échantillon de santé » accepte une date ; son champ « Type » n'accepte pas de variable, d'où le Si / Sinon.
+- Testé dans un navigateur de test : migration, verres standard, boîte de dialogue, conservation de la dernière soirée, aucune erreur. Non testé : le raccourci lui-même et l'écriture réelle dans Santé (à faire sur l'iPhone).
+
 ## À faire
 
 - Activer GitHub Pages (Settings > Pages, branche main, racine).
-- Installer la PWA sur l'iPhone et créer les deux raccourcis (`docs/RACCOURCIS.md`).
+- Installer la PWA sur l'iPhone, créer « Alcoolemie Lire » et refaire « Alcoolemie Ecrire » (`docs/RACCOURCIS.md`).
 - Tester le retour de la lecture Santé dans la PWA installée, et noter ici ce qui marche.
-- Vérifier les types de données Santé disponibles dans Raccourcis.
+- Vérifier sur l'iPhone les types « Taux d'alcool dans le sang » et « Nombre de boissons alcoolisées » dans Raccourcis, et la présence du champ date.
+- Supprimer la branche distante `menus-repliables` sur GitHub (déjà fusionnée).
+- Confirmer le degré de la Leffe Brune sur la bouteille (6,5 % retenu, 4,3 % selon une autre fiche).

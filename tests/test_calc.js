@@ -40,3 +40,31 @@ assert(Math.abs(max - 28.8/(0.7*75)) < 1e-9, 'pic theorique ' + max);
 const simR = C.simuler([ricard], p, {methode:'widmark',beta:0.15,repas:'jeun'});
 assert(simR.pic.c < max, 'pic estime sous le maximum theorique');
 console.log('maximum theorique', max.toFixed(3), 'pic estime', simR.pic.c.toFixed(3), 'OK');
+
+// Export Santé (option B) : un verre de 50 cl à 5 % à t0, homme 75 kg
+const un = [{t: t0, vol: 500, deg: 5, n: 1}];
+const opt = {methode: 'widmark', beta: 0.10, repas: 'jeun'};
+// 1) 10 min après le verre : taux non revenu à 0, seulement du passé
+let ex = C.exportSante(un, p, opt, t0 + 10 * 60000);
+assert(ex.lignes[0] === 'V;10;1', 'ligne verre ' + ex.lignes[0]);
+assert(!ex.complet, 'incomplet à 10 min');
+assert(ex.lignes[1] === 'T;10;' + Math.round(C.valeurA(C.simuler(un, p, opt), t0) * 1000), 'premier point au premier verre');
+assert(ex.nbTaux === 1, 'un seul point à 10 min : ' + ex.nbTaux);
+// 2) longtemps après : courbe complète jusqu'à 0, un point toutes les 15 min
+const now2 = t0 + 12 * 3600000;
+ex = C.exportSante(un, p, opt, now2);
+assert(ex.complet, 'complet après 12 h');
+const T = ex.lignes.filter(l => l[0] === 'T').map(l => l.split(';'));
+assert(T[0][1] === '720', 'premier point = heure du premier verre');
+assert(T[1][1] === '705', 'pas de 15 min');
+assert(T[T.length - 1][2] === '0', 'dernier point à 0');
+assert(T.every(x => +x[1] >= 0 && +x[2] >= 0), 'valeurs positives');
+const sim5 = C.simuler(un, p, opt);
+assert(T.every(x => Math.abs(+x[2] - C.valeurA(sim5, now2 - (+x[1]) * 60000) * 1000) <= 1.01 || x[2] === '0'), 'valeurs = simulation');
+// 3) plusieurs verres : une ligne par verre, à l'heure réelle
+ex = C.exportSante([{t: t0, vol: 500, deg: 5, n: 2}, {t: t0 + 3600000, vol: 250, deg: 12, n: 1}], p, opt, t0 + 2 * 3600000);
+assert(ex.lignes[0] === 'V;120;2' && ex.lignes[1] === 'V;60;1' && ex.nbVerres === 3, 'verres à heure réelle');
+// 4) sans poids : seulement les verres
+ex = C.exportSante(un, {sexe: 'H', poids: 0}, opt, t0 + 3600000);
+assert(ex.nbTaux === 0 && ex.nbVerres === 1, 'sans poids, pas de taux');
+console.log('export Santé OK (' + C.exportSante(un, p, opt, now2).nbTaux + ' points sur 12 h)');

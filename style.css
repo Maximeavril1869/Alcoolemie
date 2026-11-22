@@ -56,3 +56,12 @@ details.carte > summary::after { content: '›'; font-size: 24px; line-height: 1
   transform: rotate(90deg); transition: transform .15s; }
 details.carte[open] > summary { margin-bottom: 12px; }
 details.carte[open] > summary::after { transform: rotate(-90deg); }
+
+/* Boîte de dialogue (clôture de la soirée) */
+.voile { position: fixed; inset: 0; background: rgba(0,0,0,.65); display: flex; align-items: center;
+  justify-content: center; padding: 16px; z-index: 10; }
+.voile.cache { display: none; }
+.boite { background: var(--carte); border: 1px solid var(--bord); border-radius: 16px; padding: 16px;
+  max-width: 460px; width: 100%; max-height: 90vh; overflow: auto; }
+.boite p { white-space: pre-line; font-size: 15px; margin: 0 0 14px; }
+.boite button { width: 100%; margin-bottom: 8px; }

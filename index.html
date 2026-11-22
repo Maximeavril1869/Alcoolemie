@@ -24,7 +24,7 @@
   <section class="carte" id="carte-etat">
     <div class="etat-haut">
       <div id="valeur" class="valeur">0,00</div>
-      <div class="unite">g/L de sang<br><span id="valeur-air">0,00 mg/L d'air</span></div>
+      <div class="unite">g/L de sang<br><span id="valeur-air">0,00 mg/L d'air</span><br><span id="verres-std"></span></div>
     </div>
     <div id="message" class="message"></div>
     <p id="pic-theo" class="discret"></p>
@@ -81,31 +81,39 @@
           <option value="widmark">Widmark classique (0,7 / 0,6)</option>
         </select>
       </label>
-      <label>Élimination : <span id="beta-aff">0,15</span> g/L par heure
-        <input id="beta" type="range" min="0.08" max="0.25" step="0.01" value="0.15">
+      <label>Élimination : <span id="beta-aff">0,10</span> g/L par heure
+        <input id="beta" type="range" min="0.08" max="0.25" step="0.01" value="0.10">
       </label>
-      <p class="discret">0,10 : lent · 0,15 : moyen · 0,20 et plus : rapide. Mieux vaut rester prudent.</p>
+      <p class="discret">0,10 : prudent (par défaut) · 0,15 : moyen · 0,20 et plus : rapide. Mieux vaut rester prudent.</p>
     </details>
   </details>
 
   <details class="carte">
     <summary>Apple Santé</summary>
-    <p class="discret">Passe par l'app Raccourcis. Les deux raccourcis sont à créer une fois (voir le guide dans le dépôt).</p>
-    <div class="ligne">
-      <button id="btn-lire" class="secondaire">Lire poids et taille</button>
-      <button id="btn-ecrire" class="secondaire">Écrire dans Santé</button>
-    </div>
+    <p class="discret">Passe par l'app Raccourcis (guide dans le dépôt). L'écriture se fait à la clôture : « Nouvelle soirée » propose d'envoyer les verres et la courbe du taux.</p>
+    <button id="btn-lire" class="secondaire" style="width:100%">Lire poids et taille</button>
     <button id="btn-coller" class="lien">Coller « poids;taille » depuis le presse-papiers</button>
     <p id="sante-info" class="discret"></p>
+    <p id="derniere" class="discret"></p>
+    <button id="btn-renvoyer" class="secondaire cache" style="width:100%"></button>
   </details>
 
   <p id="stockage" class="discret" style="text-align:center"></p>
+  <p class="discret" style="text-align:center">Version <span id="version"></span></p>
 
   <p class="avertissement">
     Estimation indicative, établie avec des formules moyennes. Elle ne remplace pas un éthylotest.
     Le taux réel peut être plus élevé. Ne prends pas le volant après avoir bu.
   </p>
 </main>
+
+<div id="dlg" class="voile cache" role="dialog" aria-modal="true">
+  <div class="boite">
+    <h2 id="dlg-titre"></h2>
+    <p id="dlg-texte"></p>
+    <div id="dlg-btns"></div>
+  </div>
+</div>
 <script src="boissons.js"></script>
 <script src="calc.js"></script>
 <script src="app.js"></script>
