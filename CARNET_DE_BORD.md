@@ -42,7 +42,7 @@ Où en est le projet : la version 1 est écrite, testée et poussée sur la bran
 
 - Les cartes « Ajouter un verre », « Verres de la soirée », « Profil et repas » et « Apple Santé » deviennent des menus repliables, fermés au lancement. La carte du taux et du graphique reste toujours visible.
 - Le titre « Verres de la soirée » affiche le nombre de verres.
-- Travail sur la branche `menus-repliables`, en attente de validation avant fusion dans `main`.
+- Validé par l'utilisateur et fusionné dans `main`. La branche `menus-repliables` a été supprimée.
 
 ## À faire
 
