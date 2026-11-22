@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14161a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Alcoolémie">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+<title>Alcoolémie</title>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Alcoolémie</h1>
+    <button id="btn-reset" class="lien">Nouvelle soirée</button>
+  </header>
+
+  <section class="carte" id="carte-etat">
+    <div class="etat-haut">
+      <div id="valeur" class="valeur">0,00</div>
+      <div class="unite">g/L de sang<br><span id="valeur-air">0,00 mg/L d'air</span></div>
+    </div>
+    <div id="message" class="message"></div>
+    <canvas id="graphe" height="190"></canvas>
+    <ul id="seuils" class="seuils"></ul>
+  </section>
+
+  <section class="carte">
+    <h2>Ajouter un verre</h2>
+    <label>Boisson
+      <select id="boisson"></select>
+    </label>
+    <div id="libre" class="ligne cache">
+      <label>Volume (cl)<input id="libre-vol" type="number" inputmode="decimal" min="0" step="0.5" value="25"></label>
+      <label>Degré (%)<input id="libre-deg" type="number" inputmode="decimal" min="0" step="0.5" value="5"></label>
+    </div>
+    <div class="ligne">
+      <label>Quantité<input id="quantite" type="number" inputmode="numeric" min="1" max="20" value="1"></label>
+      <label>Heure<input id="heure" type="time"></label>
+    </div>
+    <button id="btn-ajout" class="principal">Ajouter</button>
+  </section>
+
+  <section class="carte">
+    <h2>Verres de la soirée</h2>
+    <ul id="liste" class="liste"></ul>
+    <p id="liste-vide" class="discret">Aucun verre pour l'instant.</p>
+  </section>
+
+  <section class="carte">
+    <h2>Profil et repas</h2>
+    <div class="ligne">
+      <label>Sexe
+        <select id="sexe"><option value="H">Homme</option><option value="F">Femme</option></select>
+      </label>
+      <label>Âge<input id="age" type="number" inputmode="numeric" min="14" max="110"></label>
+    </div>
+    <div class="ligne">
+      <label>Poids (kg)<input id="poids" type="number" inputmode="decimal" min="30" max="250" step="0.1"></label>
+      <label>Taille (cm)<input id="taille" type="number" inputmode="numeric" min="120" max="230"></label>
+    </div>
+    <label>Repas
+      <select id="repas"></select>
+    </label>
+    <details>
+      <summary>Réglages du calcul</summary>
+      <label>Méthode
+        <select id="methode">
+          <option value="watson">Eau corporelle (Watson) : plus fine</option>
+          <option value="widmark">Widmark classique (0,7 / 0,6)</option>
+        </select>
+      </label>
+      <label>Élimination : <span id="beta-aff">0,15</span> g/L par heure
+        <input id="beta" type="range" min="0.08" max="0.25" step="0.01" value="0.15">
+      </label>
+      <p class="discret">0,10 : lent · 0,15 : moyen · 0,20 et plus : rapide. Mieux vaut rester prudent.</p>
+    </details>
+  </section>
+
+  <section class="carte">
+    <h2>Apple Santé</h2>
+    <p class="discret">Passe par l'app Raccourcis. Les deux raccourcis sont à créer une fois (voir le guide dans le dépôt).</p>
+    <div class="ligne">
+      <button id="btn-lire" class="secondaire">Lire poids et taille</button>
+      <button id="btn-ecrire" class="secondaire">Écrire dans Santé</button>
+    </div>
+    <button id="btn-coller" class="lien">Coller « poids;taille » depuis le presse-papiers</button>
+    <p id="sante-info" class="discret"></p>
+  </section>
+
+  <p class="avertissement">
+    Estimation indicative, établie avec des formules moyennes. Elle ne remplace pas un éthylotest.
+    Le taux réel peut être plus élevé. Ne prends pas le volant après avoir bu.
+  </p>
+</main>
+<script src="calc.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
